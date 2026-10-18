@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowDown, AtSign, Check, Copy, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowDown, AtSign, Check, Copy, Play } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,6 +46,8 @@ const shorts = [
 ];
 
 function Index() {
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+
   return (
     <main className="min-h-screen bg-background">
       <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
@@ -90,7 +92,14 @@ function Index() {
       <section id="work" className="mx-auto max-w-[1500px] px-4 pb-4 md:px-6">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
           {videos.map((video, i) => (
-            <VideoTile key={video.src} video={video} index={i + 1} zoom={i === 0} />
+            <VideoTile
+              key={video.src}
+              video={video}
+              index={i + 1}
+              zoom={i === 0}
+              playing={playingIndex === i}
+              onPlay={() => setPlayingIndex(i)}
+            />
           ))}
         </div>
       </section>
@@ -156,13 +165,15 @@ function VideoTile({
   video,
   index,
   zoom,
+  playing,
+  onPlay,
 }: {
   video: { src: string; poster: string; duration: string; overlay?: string };
   index: number;
   zoom?: boolean;
+  playing: boolean;
+  onPlay: () => void;
 }) {
-  const [playing, setPlaying] = useState(false);
-
   return (
     <article className="group relative overflow-hidden rounded-xl border border-border bg-card">
       {playing ? (
@@ -178,7 +189,7 @@ function VideoTile({
       ) : (
         <button
           type="button"
-          onClick={() => setPlaying(true)}
+          onClick={onPlay}
           aria-label={`Play film ${index}`}
           className="relative block aspect-video w-full overflow-hidden text-left"
         >
@@ -220,21 +231,19 @@ type Short = { src: string; poster: string; letterboxed?: boolean };
 
 function ShortsFeed({ shorts }: { shorts: Short[] }) {
   const feedRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const [soundOn, setSoundOn] = useState(false);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
 
   function handleScroll() {
     const feed = feedRef.current;
     if (!feed) return;
     const next = Math.round(feed.scrollTop / feed.clientHeight);
-    setActive((current) => (current === next ? current : next));
+    setPlayingIndex((current) => (current !== null && current !== next ? null : current));
   }
 
   return (
     <div
       ref={feedRef}
       onScroll={handleScroll}
-      onPointerDown={() => setSoundOn(true)}
       className="no-scrollbar mx-auto aspect-[9/16] snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-2xl border border-border bg-black"
       style={{ width: "min(400px, calc(80svh * 9 / 16), calc(100vw - 2rem))" }}
     >
@@ -242,9 +251,8 @@ function ShortsFeed({ shorts }: { shorts: Short[] }) {
         <ShortTile
           key={short.src}
           short={short}
-          active={i === active}
-          soundOn={soundOn}
-          onToggleSound={() => setSoundOn((value) => !value)}
+          playing={playingIndex === i}
+          onToggle={() => setPlayingIndex((current) => (current === i ? null : i))}
         />
       ))}
     </div>
@@ -253,14 +261,12 @@ function ShortsFeed({ shorts }: { shorts: Short[] }) {
 
 function ShortTile({
   short,
-  active,
-  soundOn,
-  onToggleSound,
+  playing,
+  onToggle,
 }: {
   short: Short;
-  active: boolean;
-  soundOn: boolean;
-  onToggleSound: () => void;
+  playing: boolean;
+  onToggle: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [paused, setPaused] = useState(true);
@@ -269,31 +275,23 @@ function ShortTile({
     const video = videoRef.current;
     if (!video) return;
 
-    if (active) {
+    if (playing) {
       const attempt = video.play();
       if (attempt) attempt.catch(() => setPaused(true));
     } else {
       video.pause();
     }
-  }, [active, soundOn]);
-
-  function togglePlay() {
-    const video = videoRef.current;
-    if (!video) return;
-    if (video.paused) void video.play();
-    else video.pause();
-  }
+  }, [playing]);
 
   const video = (
     <video
       ref={videoRef}
       src={short.src}
       poster={short.poster}
-      muted={!soundOn}
       loop
       playsInline
       preload="metadata"
-      onClick={togglePlay}
+      onClick={onToggle}
       onPlay={() => setPaused(false)}
       onPause={() => setPaused(true)}
       className={
@@ -326,7 +324,7 @@ function ShortTile({
       {paused && (
         <button
           type="button"
-          onClick={togglePlay}
+          onClick={onToggle}
           aria-label="Play short"
           className="absolute inset-0 flex items-center justify-center bg-black/25"
         >
@@ -335,16 +333,6 @@ function ShortTile({
           </span>
         </button>
       )}
-      <button
-        type="button"
-        onPointerDown={(event) => event.stopPropagation()}
-        onClick={onToggleSound}
-        aria-label={soundOn ? "Turn sound off" : "Turn sound on"}
-        className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-3 py-2 text-xs font-medium text-white backdrop-blur transition hover:bg-black/70"
-      >
-        {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-        {soundOn ? "Sound on" : "Sound off"}
-      </button>
     </div>
   );
 }
