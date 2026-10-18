@@ -26,7 +26,12 @@ const videos = [
   { src: asset("/music videos/5.mp4"), poster: asset("/thumbs/thumb-19.jpg"), duration: "0:18" },
   { src: asset("/music videos/7.mp4"), poster: asset("/thumbs/thumb-21.jpg"), duration: "0:13" },
   { src: asset("/motion graphics/0-web.mp4"), poster: asset("/thumbs/thumb-20.jpg"), duration: "1:01" },
-  { src: asset("/3d/video.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:10" },
+  {
+    src: asset("/3d/video.mp4"),
+    poster: asset("/thumbs/thumb-01.jpg"),
+    duration: "0:10",
+    overlay: asset("/pfp.png"),
+  },
   {
     src: asset("/music videos/6.webm"),
     poster: asset("/thumbs/thumb-09.jpg"),
@@ -152,14 +157,14 @@ function VideoTile({
   index,
   zoom,
 }: {
-  video: { src: string; poster: string; duration: string };
+  video: { src: string; poster: string; duration: string; overlay?: string };
   index: number;
   zoom?: boolean;
 }) {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <article className="group overflow-hidden rounded-xl border border-border bg-card">
+    <article className="group relative overflow-hidden rounded-xl border border-border bg-card">
       {playing ? (
         <video
           src={video.src}
@@ -198,6 +203,14 @@ function VideoTile({
             </span>
           </span>
         </button>
+      )}
+      {video.overlay && (
+        <img
+          src={video.overlay}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute bottom-2 right-2 z-10 h-11 w-11 rounded-full border-2 border-black/70 object-cover shadow-lg"
+        />
       )}
     </article>
   );
