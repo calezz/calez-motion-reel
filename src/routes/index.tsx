@@ -44,10 +44,10 @@ const videos = [
   { src: asset("/motion graphics/motion-gfx1.mp4"), poster: asset("/thumbs/thumb-04.jpg"), duration: "0:40" },
   { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:47" },
   { src: asset("/3d/3d1.mp4"), poster: asset("/thumbs/thumb-02.jpg"), duration: "1:15" },
+  { src: asset("/music videos/variant-a-cropped.mp4"), poster: asset("/thumbs/thumb-13.jpg"), duration: "0:12", wide: true },
 ];
 
 const shorts = [
-  { src: asset("/music videos/variant-a.mp4"), poster: asset("/thumbs/thumb-10.jpg") },
   { src: asset("/shorts/short.webm"), poster: asset("/thumbs/thumb-11.jpg") },
   { src: asset("/shorts/short1.webm"), poster: asset("/thumbs/thumb-12.jpg") },
 ];
@@ -89,17 +89,20 @@ function Index() {
       <section id="work" className="mx-auto max-w-[1500px] px-4 pb-4 md:px-6">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
           {videos.map((video, i) => (
-            <VideoTile key={video.src} video={video} index={i + 1} />
+            <VideoTile key={video.src} video={video} index={i + 1} zoom={i === 0} />
           ))}
         </div>
       </section>
 
-      <section className="mx-auto mt-14 max-w-[1500px] px-4 pb-20 md:mt-20 md:px-6">
+      <section id="shorts" className="mx-auto mt-14 max-w-[1500px] px-4 pb-20 md:mt-20 md:px-6">
         <div className="mb-4 flex items-end justify-between">
           <h2 className="font-display text-2xl font-extrabold md:text-3xl">Shorts</h2>
           <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Scroll</span>
         </div>
-        <div className="no-scrollbar mx-auto h-[80svh] max-h-[860px] w-full max-w-[400px] snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-2xl border border-border bg-black">
+        <div
+          className="no-scrollbar mx-auto aspect-[9/16] snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-2xl border border-border bg-black"
+          style={{ width: "min(400px, calc(80svh * 9 / 16), calc(100vw - 2rem))" }}
+        >
           {shorts.map((short) => (
             <ShortTile key={short.src} short={short} />
           ))}
@@ -112,14 +115,21 @@ function Index() {
 function VideoTile({
   video,
   index,
+  zoom,
 }: {
-  video: { src: string; poster: string; duration: string };
+  video: { src: string; poster: string; duration: string; wide?: boolean };
   index: number;
+  zoom?: boolean;
 }) {
   const [playing, setPlaying] = useState(false);
+  const mediaRatio = video.wide ? "aspect-video lg:aspect-[21/9]" : "aspect-video";
 
   return (
-    <article className="group overflow-hidden rounded-xl border border-border bg-card">
+    <article
+      className={`group overflow-hidden rounded-xl border border-border bg-card ${
+        video.wide ? "sm:col-span-2 lg:col-span-3" : ""
+      }`}
+    >
       {playing ? (
         <video
           src={video.src}
@@ -128,20 +138,22 @@ function VideoTile({
           autoPlay
           loop
           playsInline
-          className="aspect-video w-full bg-black object-cover"
+          className={`w-full bg-black object-cover ${mediaRatio} ${zoom ? "scale-[1.15]" : ""}`}
         />
       ) : (
         <button
           type="button"
           onClick={() => setPlaying(true)}
           aria-label={`Play film ${index}`}
-          className="relative block aspect-video w-full overflow-hidden text-left"
+          className={`relative block w-full overflow-hidden text-left ${mediaRatio}`}
         >
           <img
             src={video.poster}
             alt=""
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+            className={`absolute inset-0 h-full w-full object-cover transition duration-700 ${
+              zoom ? "scale-[1.15] group-hover:scale-[1.2]" : "group-hover:scale-105"
+            }`}
           />
           <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/0" />
           <span className="absolute left-4 top-3.5 text-xs font-medium tabular-nums text-white/70">
