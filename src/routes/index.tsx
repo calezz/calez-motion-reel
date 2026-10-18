@@ -26,7 +26,7 @@ const videos = [
   { src: asset("/music videos/5.mp4"), poster: asset("/thumbs/thumb-19.jpg"), duration: "0:18" },
   { src: asset("/music videos/7.mp4"), poster: asset("/thumbs/thumb-21.jpg"), duration: "0:13" },
   { src: asset("/motion graphics/0-web.mp4"), poster: asset("/thumbs/thumb-20.jpg"), duration: "1:01" },
-  { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:47" },
+  { src: asset("/3d/video.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:10" },
   {
     src: asset("/music videos/6.webm"),
     poster: asset("/thumbs/thumb-09.jpg"),
