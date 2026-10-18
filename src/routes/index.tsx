@@ -25,11 +25,11 @@ const videos = [
   { src: asset("/music videos/4.mp4"), poster: asset("/thumbs/thumb-18.jpg"), duration: "0:26" },
   { src: asset("/music videos/5.mp4"), poster: asset("/thumbs/thumb-19.jpg"), duration: "0:18" },
   { src: asset("/motion graphics/motion-gfx.mp4"), poster: asset("/thumbs/thumb-03.jpg"), duration: "0:45" },
-  { src: asset("/motion graphics/1.mp4"), poster: asset("/thumbs/thumb-20.jpg"), duration: "0:48" },
+  { src: asset("/motion graphics/0-web.mp4"), poster: asset("/thumbs/thumb-20.jpg"), duration: "1:01" },
   { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:47" },
   { src: asset("/3d/3d1.mp4"), poster: asset("/thumbs/thumb-02.jpg"), duration: "1:15" },
   {
-    src: asset("/music videos/motion-graphic-collage.webm"),
+    src: asset("/music videos/6.webm"),
     poster: asset("/thumbs/thumb-09.jpg"),
     duration: "1:08",
     wide: true,
