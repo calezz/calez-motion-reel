@@ -27,7 +27,7 @@ const videos = [
   { src: asset("/music videos/7.mp4"), poster: asset("/thumbs/thumb-21.jpg"), duration: "0:13" },
   { src: asset("/motion graphics/0-web.mp4"), poster: asset("/thumbs/thumb-20.jpg"), duration: "1:01" },
   {
-    src: asset("/3d/video.mp4"),
+    src: asset("/3d/video-pfp.mp4"),
     poster: asset("/thumbs/thumb-01.jpg"),
     duration: "0:10",
     overlay: asset("/pfp.png"),
@@ -204,7 +204,7 @@ function VideoTile({
           </span>
         </button>
       )}
-      {video.overlay && (
+      {!playing && video.overlay && (
         <img
           src={video.overlay}
           alt=""
