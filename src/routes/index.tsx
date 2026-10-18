@@ -32,7 +32,6 @@ const videos = [
     src: asset("/music videos/6.webm"),
     poster: asset("/thumbs/thumb-09.jpg"),
     duration: "1:08",
-    wide: true,
   },
 ];
 
@@ -77,7 +76,7 @@ function Index() {
       </section>
 
       <section id="work" className="mx-auto max-w-[1500px] px-4 pb-4 md:px-6">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4 lg:[&>article:last-child]:col-start-2">
           {videos.map((video, i) => (
             <VideoTile key={video.src} video={video} index={i + 1} zoom={i === 0} />
           ))}
@@ -100,19 +99,14 @@ function VideoTile({
   index,
   zoom,
 }: {
-  video: { src: string; poster: string; duration: string; wide?: boolean };
+  video: { src: string; poster: string; duration: string };
   index: number;
   zoom?: boolean;
 }) {
   const [playing, setPlaying] = useState(false);
-  const mediaRatio = video.wide ? "aspect-video lg:aspect-[21/9]" : "aspect-video";
 
   return (
-    <article
-      className={`group overflow-hidden rounded-xl border border-border bg-card ${
-        video.wide ? "sm:col-span-2 lg:col-span-3" : ""
-      }`}
-    >
+    <article className="group overflow-hidden rounded-xl border border-border bg-card">
       {playing ? (
         <video
           src={video.src}
@@ -121,14 +115,14 @@ function VideoTile({
           autoPlay
           loop
           playsInline
-          className={`w-full bg-black object-cover ${mediaRatio} ${zoom ? "scale-[1.15]" : ""}`}
+          className={`aspect-video w-full bg-black object-cover ${zoom ? "scale-[1.15]" : ""}`}
         />
       ) : (
         <button
           type="button"
           onClick={() => setPlaying(true)}
           aria-label={`Play film ${index}`}
-          className={`relative block w-full overflow-hidden text-left ${mediaRatio}`}
+          className="relative block aspect-video w-full overflow-hidden text-left"
         >
           <img
             src={video.poster}
