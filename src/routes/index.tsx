@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, AtSign, Check, Copy, Play } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -57,6 +57,12 @@ function Index() {
             calez<span className="text-primary">.</span>
           </a>
           <div className="flex items-center gap-5">
+            <Link
+              to="/thumbnails"
+              className="hidden text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition hover:text-foreground sm:block"
+            >
+              Thumbnails
+            </Link>
             <a
               href="#contact"
               className="hidden text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition hover:text-foreground sm:block"
@@ -124,6 +130,12 @@ function Index() {
             <h2 className="mt-3 font-display text-3xl font-extrabold leading-tight md:text-5xl">
               Find me on Discord<span className="text-primary">.</span>
             </h2>
+            <Link
+              to="/thumbnails"
+              className="mt-4 inline-block text-sm text-primary transition hover:underline"
+            >
+              Browse thumbnail work →
+            </Link>
           </div>
           <DiscordHandle />
         </div>
