@@ -249,7 +249,7 @@ function ShortsFeed({
     const feed = feedRef.current;
     if (!feed) return;
     const next = Math.round(feed.scrollTop / feed.clientHeight);
-    if (playingIndex !== null && playingIndex !== next) onPlayingChange(null);
+    if (playingIndex !== next) onPlayingChange(next);
   }
 
   return (
@@ -288,8 +288,15 @@ function ShortTile({
     if (!video) return;
 
     if (playing) {
+      video.muted = false;
       const attempt = video.play();
-      if (attempt) attempt.catch(() => setPaused(true));
+      if (attempt) {
+        attempt.catch(() => {
+          video.muted = true;
+          const retry = video.play();
+          if (retry) retry.catch(() => setPaused(true));
+        });
+      }
     } else {
       video.pause();
     }
