@@ -46,7 +46,8 @@ const shorts = [
 ];
 
 function Index() {
-  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+  const [playingKey, setPlayingKey] = useState<string | null>(null);
+  const shortPlayingIndex = playingKey?.startsWith("short-") ? Number(playingKey.slice(6)) : null;
 
   return (
     <main className="min-h-screen bg-background">
@@ -97,8 +98,8 @@ function Index() {
               video={video}
               index={i + 1}
               zoom={i === 0}
-              playing={playingIndex === i}
-              onPlay={() => setPlayingIndex(i)}
+              playing={playingKey === `film-${i}`}
+              onPlay={() => setPlayingKey(`film-${i}`)}
             />
           ))}
         </div>
@@ -109,7 +110,11 @@ function Index() {
           <h2 className="font-display text-2xl font-extrabold md:text-3xl">Shorts</h2>
           <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Scroll</span>
         </div>
-        <ShortsFeed shorts={shorts} />
+        <ShortsFeed
+          shorts={shorts}
+          playingIndex={shortPlayingIndex}
+          onPlayingChange={(index) => setPlayingKey(index === null ? null : `short-${index}`)}
+        />
       </section>
 
       <footer id="contact" className="scroll-mt-20 border-t border-border">
@@ -229,15 +234,22 @@ function VideoTile({
 
 type Short = { src: string; poster: string; letterboxed?: boolean };
 
-function ShortsFeed({ shorts }: { shorts: Short[] }) {
+function ShortsFeed({
+  shorts,
+  playingIndex,
+  onPlayingChange,
+}: {
+  shorts: Short[];
+  playingIndex: number | null;
+  onPlayingChange: (index: number | null) => void;
+}) {
   const feedRef = useRef<HTMLDivElement>(null);
-  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
 
   function handleScroll() {
     const feed = feedRef.current;
     if (!feed) return;
     const next = Math.round(feed.scrollTop / feed.clientHeight);
-    setPlayingIndex((current) => (current !== null && current !== next ? null : current));
+    if (playingIndex !== null && playingIndex !== next) onPlayingChange(null);
   }
 
   return (
@@ -252,7 +264,7 @@ function ShortsFeed({ shorts }: { shorts: Short[] }) {
           key={short.src}
           short={short}
           playing={playingIndex === i}
-          onToggle={() => setPlayingIndex((current) => (current === i ? null : i))}
+          onToggle={() => onPlayingChange(playingIndex === i ? null : i)}
         />
       ))}
     </div>
