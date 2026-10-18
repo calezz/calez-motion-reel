@@ -5,10 +5,10 @@ import { ArrowDown, AtSign, Check, Copy, Play, Volume2, VolumeX } from "lucide-r
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "calez — Motion Designer | Reels & Projects" },
-      { name: "description", content: "Showreel and selected motion design work by calez." },
-      { property: "og:title", content: "calez — Motion Designer" },
-      { property: "og:description", content: "Showreel and selected motion design work." },
+      { title: "calez — Music Videos & Visuals" },
+      { name: "description", content: "Music videos, lyric visuals and short-form edits for artists and labels. Selected work by calez." },
+      { property: "og:title", content: "calez — Music Videos & Visuals" },
+      { property: "og:description", content: "Music videos, lyric visuals and short-form edits for artists and labels." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -65,12 +65,12 @@ function Index() {
 
       <section id="top" className="mx-auto max-w-[1500px] px-4 pb-10 pt-14 md:px-6 md:pb-14 md:pt-20">
         <h1 className="max-w-5xl font-display text-[2.65rem] font-extrabold leading-[0.95] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
-          Things that <span className="text-primary">move</span> people.
+          Visuals that <span className="text-primary">move</span> music.
         </h1>
         <div className="mt-8 flex flex-col gap-6 md:mt-10 md:flex-row md:items-end md:justify-between">
           <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            Motion design, 3D and type for brands that want to be felt. Selected films across music, motion and 3D,
-            plus a rolling feed of shorts.
+            Music videos, lyric visuals and short-form edits for artists and labels. Built to match your sound,
+            frame by frame.
           </p>
           <a
             href="#contact"
