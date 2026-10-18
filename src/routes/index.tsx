@@ -24,9 +24,9 @@ const videos = [
   { src: asset("/music videos/3.mp4"), poster: asset("/thumbs/thumb-17.jpg"), duration: "0:23" },
   { src: asset("/music videos/4.mp4"), poster: asset("/thumbs/thumb-18.jpg"), duration: "0:26" },
   { src: asset("/music videos/5.mp4"), poster: asset("/thumbs/thumb-19.jpg"), duration: "0:18" },
+  { src: asset("/music videos/7.mp4"), poster: asset("/thumbs/thumb-21.jpg"), duration: "0:13" },
   { src: asset("/motion graphics/0-web.mp4"), poster: asset("/thumbs/thumb-20.jpg"), duration: "1:01" },
   { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:47" },
-  { src: asset("/3d/3d1.mp4"), poster: asset("/thumbs/thumb-02.jpg"), duration: "1:15" },
   {
     src: asset("/music videos/6.webm"),
     poster: asset("/thumbs/thumb-09.jpg"),
