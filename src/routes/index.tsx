@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDown, Play, Volume2, VolumeX } from "lucide-react";
 
@@ -19,31 +19,21 @@ export const Route = createFileRoute("/")({
 const asset = (path: string) => encodeURI(path);
 
 const videos = [
-  {
-    src: asset("/music videos/After Effects Tutorial_ Lyrics Videos For Songs _ Arsacre_ 2020_6_32.mp4"),
-    poster: asset("/thumbs/thumb-05.jpg"),
-    duration: "0:26",
-  },
-  {
-    src: asset("/music videos/How to Make CAR MUSIC Type Audio Spectrum In After Effects_11_23.mp4"),
-    poster: asset("/thumbs/thumb-06.jpg"),
-    duration: "0:12",
-  },
-  {
-    src: asset("/music videos/How to make Easy Professional Lyrics Video in After Effects_5_23.mp4"),
-    poster: asset("/thumbs/thumb-07.jpg"),
-    duration: "0:18",
-  },
-  {
-    src: asset("/music videos/How to make Lyrics Video in After Effects - EASY Tutorial [STAY EDIT]_5_28.mp4"),
-    poster: asset("/thumbs/thumb-08.jpg"),
-    duration: "0:23",
-  },
-  { src: asset("/music videos/motion-graphic-collage.webm"), poster: asset("/thumbs/thumb-09.jpg"), duration: "1:08" },
+  { src: asset("/music videos/1.mp4"), poster: asset("/thumbs/thumb-15.jpg"), duration: "0:12" },
+  { src: asset("/music videos/2.mp4"), poster: asset("/thumbs/thumb-16.jpg"), duration: "0:17" },
+  { src: asset("/music videos/3.mp4"), poster: asset("/thumbs/thumb-17.jpg"), duration: "0:23" },
+  { src: asset("/music videos/4.mp4"), poster: asset("/thumbs/thumb-18.jpg"), duration: "0:26" },
+  { src: asset("/music videos/5.mp4"), poster: asset("/thumbs/thumb-19.jpg"), duration: "0:18" },
   { src: asset("/motion graphics/motion-gfx.mp4"), poster: asset("/thumbs/thumb-03.jpg"), duration: "0:45" },
-  { src: asset("/motion graphics/motion-gfx1.mp4"), poster: asset("/thumbs/thumb-04.jpg"), duration: "0:40" },
+  { src: asset("/motion graphics/1.mp4"), poster: asset("/thumbs/thumb-20.jpg"), duration: "0:48" },
   { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:47" },
   { src: asset("/3d/3d1.mp4"), poster: asset("/thumbs/thumb-02.jpg"), duration: "1:15" },
+  {
+    src: asset("/music videos/motion-graphic-collage.webm"),
+    poster: asset("/thumbs/thumb-09.jpg"),
+    duration: "1:08",
+    wide: true,
+  },
 ];
 
 const shorts = [
@@ -73,8 +63,8 @@ function Index() {
         </h1>
         <div className="mt-8 flex flex-col gap-6 md:mt-10 md:flex-row md:items-end md:justify-between">
           <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            Motion design, 3D and type for brands that want to be felt. Nine selected films and a rolling feed of
-            shorts.
+            Motion design, 3D and type for brands that want to be felt. Selected films across music, motion and 3D,
+            plus a rolling feed of shorts.
           </p>
           <a
             href="#work"
@@ -99,14 +89,7 @@ function Index() {
           <h2 className="font-display text-2xl font-extrabold md:text-3xl">Shorts</h2>
           <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Scroll</span>
         </div>
-        <div
-          className="no-scrollbar mx-auto aspect-[9/16] snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-2xl border border-border bg-black"
-          style={{ width: "min(400px, calc(80svh * 9 / 16), calc(100vw - 2rem))" }}
-        >
-          {shorts.map((short) => (
-            <ShortTile key={short.src} short={short} />
-          ))}
-        </div>
+        <ShortsFeed shorts={shorts} />
       </section>
     </main>
   );
@@ -117,14 +100,19 @@ function VideoTile({
   index,
   zoom,
 }: {
-  video: { src: string; poster: string; duration: string };
+  video: { src: string; poster: string; duration: string; wide?: boolean };
   index: number;
   zoom?: boolean;
 }) {
   const [playing, setPlaying] = useState(false);
+  const mediaRatio = video.wide ? "aspect-video lg:aspect-[21/9]" : "aspect-video";
 
   return (
-    <article className="group overflow-hidden rounded-xl border border-border bg-card">
+    <article
+      className={`group overflow-hidden rounded-xl border border-border bg-card ${
+        video.wide ? "sm:col-span-2 lg:col-span-3" : ""
+      }`}
+    >
       {playing ? (
         <video
           src={video.src}
@@ -133,14 +121,14 @@ function VideoTile({
           autoPlay
           loop
           playsInline
-          className={`aspect-video w-full bg-black object-cover ${zoom ? "scale-[1.15]" : ""}`}
+          className={`w-full bg-black object-cover ${mediaRatio} ${zoom ? "scale-[1.15]" : ""}`}
         />
       ) : (
         <button
           type="button"
           onClick={() => setPlaying(true)}
           aria-label={`Play film ${index}`}
-          className="relative block aspect-video w-full overflow-hidden text-left"
+          className={`relative block w-full overflow-hidden text-left ${mediaRatio}`}
         >
           <img
             src={video.poster}
@@ -168,10 +156,66 @@ function VideoTile({
   );
 }
 
-function ShortTile({ short }: { short: { src: string; poster: string; letterboxed?: boolean } }) {
+type Short = { src: string; poster: string; letterboxed?: boolean };
+
+function ShortsFeed({ shorts }: { shorts: Short[] }) {
+  const feedRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const [soundOn, setSoundOn] = useState(false);
+
+  function handleScroll() {
+    const feed = feedRef.current;
+    if (!feed) return;
+    const next = Math.round(feed.scrollTop / feed.clientHeight);
+    setActive((current) => (current === next ? current : next));
+  }
+
+  return (
+    <div
+      ref={feedRef}
+      onScroll={handleScroll}
+      onPointerDown={() => setSoundOn(true)}
+      className="no-scrollbar mx-auto aspect-[9/16] snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-2xl border border-border bg-black"
+      style={{ width: "min(400px, calc(80svh * 9 / 16), calc(100vw - 2rem))" }}
+    >
+      {shorts.map((short, i) => (
+        <ShortTile
+          key={short.src}
+          short={short}
+          active={i === active}
+          soundOn={soundOn}
+          onToggleSound={() => setSoundOn((value) => !value)}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ShortTile({
+  short,
+  active,
+  soundOn,
+  onToggleSound,
+}: {
+  short: Short;
+  active: boolean;
+  soundOn: boolean;
+  onToggleSound: () => void;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
   const [paused, setPaused] = useState(true);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (active) {
+      const attempt = video.play();
+      if (attempt) attempt.catch(() => setPaused(true));
+    } else {
+      video.pause();
+    }
+  }, [active, soundOn]);
 
   function togglePlay() {
     const video = videoRef.current;
@@ -180,20 +224,12 @@ function ShortTile({ short }: { short: { src: string; poster: string; letterboxe
     else video.pause();
   }
 
-  function toggleMute() {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = !video.muted;
-    setMuted(video.muted);
-  }
-
   const video = (
     <video
       ref={videoRef}
       src={short.src}
       poster={short.poster}
-      autoPlay
-      muted
+      muted={!soundOn}
       loop
       playsInline
       preload="metadata"
@@ -241,12 +277,13 @@ function ShortTile({ short }: { short: { src: string; poster: string; letterboxe
       )}
       <button
         type="button"
-        onClick={toggleMute}
-        aria-label={muted ? "Turn sound on" : "Turn sound off"}
+        onPointerDown={(event) => event.stopPropagation()}
+        onClick={onToggleSound}
+        aria-label={soundOn ? "Turn sound off" : "Turn sound on"}
         className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-3 py-2 text-xs font-medium text-white backdrop-blur transition hover:bg-black/70"
       >
-        {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-        {muted ? "Sound off" : "Sound on"}
+        {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+        {soundOn ? "Sound on" : "Sound off"}
       </button>
     </div>
   );
