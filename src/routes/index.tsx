@@ -73,10 +73,10 @@ function Index() {
             plus a rolling feed of shorts.
           </p>
           <a
-            href="#work"
+            href="#contact"
             className="inline-flex items-center gap-2 self-start rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 active:scale-[0.98] md:self-auto"
           >
-            Watch the work
+            Contact me
             <ArrowDown className="h-4 w-4" />
           </a>
         </div>
