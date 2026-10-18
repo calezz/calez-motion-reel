@@ -1,4 +1,6 @@
+import { useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { ArrowDown, Play, Volume2, VolumeX } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,97 +22,202 @@ const videos = [
   {
     src: asset("/music videos/After Effects Tutorial_ Lyrics Videos For Songs _ Arsacre_ 2020_6_32.mp4"),
     poster: asset("/thumbs/thumb-05.jpg"),
+    duration: "0:26",
   },
   {
     src: asset("/music videos/How to Make CAR MUSIC Type Audio Spectrum In After Effects_11_23.mp4"),
     poster: asset("/thumbs/thumb-06.jpg"),
+    duration: "0:12",
   },
   {
     src: asset("/music videos/How to make Easy Professional Lyrics Video in After Effects_5_23.mp4"),
     poster: asset("/thumbs/thumb-07.jpg"),
+    duration: "0:18",
   },
   {
     src: asset("/music videos/How to make Lyrics Video in After Effects - EASY Tutorial [STAY EDIT]_5_28.mp4"),
     poster: asset("/thumbs/thumb-08.jpg"),
+    duration: "0:23",
   },
-  { src: asset("/music videos/motion-graphic-collage.webm"), poster: asset("/thumbs/thumb-09.jpg") },
-  { src: asset("/music videos/variant-a.mp4"), poster: asset("/thumbs/thumb-10.jpg") },
-  { src: asset("/motion graphics/motion-gfx.mp4"), poster: asset("/thumbs/thumb-03.jpg") },
-  { src: asset("/motion graphics/motion-gfx1.mp4"), poster: asset("/thumbs/thumb-04.jpg") },
+  { src: asset("/music videos/motion-graphic-collage.webm"), poster: asset("/thumbs/thumb-09.jpg"), duration: "1:08" },
+  { src: asset("/motion graphics/motion-gfx.mp4"), poster: asset("/thumbs/thumb-03.jpg"), duration: "0:45" },
+  { src: asset("/motion graphics/motion-gfx1.mp4"), poster: asset("/thumbs/thumb-04.jpg"), duration: "0:40" },
+  { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:47" },
+  { src: asset("/3d/3d1.mp4"), poster: asset("/thumbs/thumb-02.jpg"), duration: "1:15" },
 ];
 
 const shorts = [
+  { src: asset("/music videos/variant-a.mp4"), poster: asset("/thumbs/thumb-10.jpg") },
   { src: asset("/shorts/short.webm"), poster: asset("/thumbs/thumb-11.jpg") },
   { src: asset("/shorts/short1.webm"), poster: asset("/thumbs/thumb-12.jpg") },
 ];
 
-const videosAfterShorts = [
-  { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg") },
-  { src: asset("/3d/3d1.mp4"), poster: asset("/thumbs/thumb-02.jpg") },
-];
-
 function Index() {
   return (
-    <main className="min-h-screen bg-background p-4">
-      <header className="mx-auto max-w-6xl px-2 pb-10 pt-12 md:pb-16 md:pt-20">
-        <p className="text-xs uppercase tracking-[0.3em] text-primary">Motion designer · 3D · Type</p>
-        <h1 className="mt-5 font-display text-6xl font-extrabold leading-[0.9] md:text-8xl">
-          calez<span className="text-primary">.</span>
-        </h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-          I make things that move people. Brand films, product launches, kinetic type and social cuts — built
-          frame by frame. Available for collaborations worldwide.
-        </p>
-        <nav className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-          <a href="#videos" className="text-primary hover:underline">Watch the work ↓</a>
-        </nav>
+    <main className="min-h-screen bg-background">
+      <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between px-4 py-4 md:px-6">
+          <a href="#top" className="font-display text-lg font-extrabold">
+            calez<span className="text-primary">.</span>
+          </a>
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            Available for work
+          </div>
+        </div>
       </header>
 
-      <div id="videos" className="columns-1 gap-4 sm:columns-2 xl:columns-3">
-        {videos.map((v, i) => (
-          <VideoCard key={v.src} video={v} zoom={i === 0} />
-        ))}
-      </div>
+      <section id="top" className="mx-auto max-w-[1500px] px-4 pb-10 pt-14 md:px-6 md:pb-14 md:pt-20">
+        <h1 className="max-w-5xl font-display text-[2.65rem] font-extrabold leading-[0.95] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+          Things that <span className="text-primary">move</span> people.
+        </h1>
+        <div className="mt-8 flex flex-col gap-6 md:mt-10 md:flex-row md:items-end md:justify-between">
+          <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+            Motion design, 3D and type for brands that want to be felt. Nine selected films and a rolling feed of
+            shorts.
+          </p>
+          <a
+            href="#work"
+            className="inline-flex items-center gap-2 self-start rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 active:scale-[0.98] md:self-auto"
+          >
+            Watch the work
+            <ArrowDown className="h-4 w-4" />
+          </a>
+        </div>
+      </section>
 
-      <section className="mx-auto my-8 max-w-[420px]">
-        <div className="no-scrollbar h-[85svh] snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-2xl border border-border bg-black">
-          {shorts.map((v) => (
-            <div key={v.src} className="flex h-full snap-start items-center justify-center bg-black">
-              <video
-                src={v.src}
-                poster={v.poster}
-                controls
-                loop
-                playsInline
-                preload="metadata"
-                className="h-full w-full object-cover"
-              />
-            </div>
+      <section id="work" className="mx-auto max-w-[1500px] px-4 pb-4 md:px-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
+          {videos.map((video, i) => (
+            <VideoTile key={video.src} video={video} index={i + 1} />
           ))}
         </div>
       </section>
 
-      <div className="columns-1 gap-4 sm:columns-2 xl:columns-3">
-        {videosAfterShorts.map((v) => (
-          <VideoCard key={v.src} video={v} />
-        ))}
-      </div>
+      <section className="mx-auto mt-14 max-w-[1500px] px-4 pb-20 md:mt-20 md:px-6">
+        <div className="mb-4 flex items-end justify-between">
+          <h2 className="font-display text-2xl font-extrabold md:text-3xl">Shorts</h2>
+          <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Scroll</span>
+        </div>
+        <div className="no-scrollbar mx-auto h-[80svh] max-h-[860px] w-full max-w-[400px] snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-2xl border border-border bg-black">
+          {shorts.map((short) => (
+            <ShortTile key={short.src} short={short} />
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
 
-function VideoCard({ video, zoom }: { video: { src: string; poster: string }; zoom?: boolean }) {
+function VideoTile({
+  video,
+  index,
+}: {
+  video: { src: string; poster: string; duration: string };
+  index: number;
+}) {
+  const [playing, setPlaying] = useState(false);
+
   return (
-    <div className="mb-4 break-inside-avoid overflow-hidden rounded-lg border border-border bg-card">
+    <article className="group overflow-hidden rounded-xl border border-border bg-card">
+      {playing ? (
+        <video
+          src={video.src}
+          poster={video.poster}
+          controls
+          autoPlay
+          loop
+          playsInline
+          className="aspect-video w-full bg-black object-cover"
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setPlaying(true)}
+          aria-label={`Play film ${index}`}
+          className="relative block aspect-video w-full overflow-hidden text-left"
+        >
+          <img
+            src={video.poster}
+            alt=""
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          />
+          <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/0" />
+          <span className="absolute left-4 top-3.5 text-xs font-medium tabular-nums text-white/70">
+            {String(index).padStart(2, "0")}
+          </span>
+          <span className="absolute right-3 top-3 rounded-full border border-white/15 bg-black/50 px-2.5 py-1 text-[11px] font-medium tabular-nums text-white/80 backdrop-blur">
+            {video.duration}
+          </span>
+          <span className="absolute inset-0 flex items-center justify-center">
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl transition duration-300 group-hover:scale-110">
+              <Play className="ml-0.5 h-5 w-5 fill-current" />
+            </span>
+          </span>
+        </button>
+      )}
+    </article>
+  );
+}
+
+function ShortTile({ short }: { short: { src: string; poster: string } }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+  const [paused, setPaused] = useState(true);
+
+  function togglePlay() {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) void video.play();
+    else video.pause();
+  }
+
+  function toggleMute() {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setMuted(video.muted);
+  }
+
+  return (
+    <div className="relative h-full snap-start overflow-hidden bg-black">
       <video
-        src={video.src}
-        poster={video.poster}
-        controls
+        ref={videoRef}
+        src={short.src}
+        poster={short.poster}
+        autoPlay
+        muted
         loop
         playsInline
         preload="metadata"
-        className={`block w-full ${zoom ? "scale-110" : ""}`}
+        onClick={togglePlay}
+        onPlay={() => setPaused(false)}
+        onPause={() => setPaused(true)}
+        className="h-full w-full cursor-pointer object-cover"
       />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/70 to-transparent" />
+      {paused && (
+        <button
+          type="button"
+          onClick={togglePlay}
+          aria-label="Play short"
+          className="absolute inset-0 flex items-center justify-center bg-black/25"
+        >
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl">
+            <Play className="ml-0.5 h-5 w-5 fill-current" />
+          </span>
+        </button>
+      )}
+      <button
+        type="button"
+        onClick={toggleMute}
+        aria-label={muted ? "Turn sound on" : "Turn sound off"}
+        className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-3 py-2 text-xs font-medium text-white backdrop-blur transition hover:bg-black/70"
+      >
+        {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+        {muted ? "Sound off" : "Sound on"}
+      </button>
     </div>
   );
 }
