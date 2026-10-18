@@ -41,7 +41,7 @@ const videos = [
 
 const shorts = [
   { src: asset("/shorts/1.mp4"), poster: asset("/thumbs/thumb-14.jpg"), letterboxed: true },
-  { src: asset("/shorts/short.webm"), poster: asset("/thumbs/thumb-11.jpg") },
+  { src: asset("/shorts/football-web.mp4"), poster: asset("/thumbs/thumb-11.jpg") },
   { src: asset("/shorts/short1.webm"), poster: asset("/thumbs/thumb-12.jpg") },
 ];
 
