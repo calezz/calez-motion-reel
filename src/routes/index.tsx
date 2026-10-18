@@ -37,8 +37,14 @@ const videos = [
   { src: asset("/music videos/variant-a.mp4"), poster: asset("/thumbs/thumb-10.jpg") },
   { src: asset("/motion graphics/motion-gfx.mp4"), poster: asset("/thumbs/thumb-03.jpg") },
   { src: asset("/motion graphics/motion-gfx1.mp4"), poster: asset("/thumbs/thumb-04.jpg") },
+];
+
+const shorts = [
   { src: asset("/shorts/short.webm"), poster: asset("/thumbs/thumb-11.jpg") },
   { src: asset("/shorts/short1.webm"), poster: asset("/thumbs/thumb-12.jpg") },
+];
+
+const videosAfterShorts = [
   { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg") },
   { src: asset("/3d/3d1.mp4"), poster: asset("/thumbs/thumb-02.jpg") },
 ];
@@ -62,22 +68,49 @@ function Index() {
 
       <div id="videos" className="columns-1 gap-4 sm:columns-2 xl:columns-3">
         {videos.map((v, i) => (
-          <div
-            key={v.src}
-            className="mb-4 break-inside-avoid overflow-hidden rounded-lg border border-border bg-card"
-          >
-            <video
-              src={v.src}
-              poster={v.poster}
-              controls
-              loop
-              playsInline
-              preload="metadata"
-              className={`block w-full ${i === 0 ? "scale-110" : ""}`}
-            />
-          </div>
+          <VideoCard key={v.src} video={v} zoom={i === 0} />
+        ))}
+      </div>
+
+      <section className="mx-auto my-8 max-w-[420px]">
+        <div className="no-scrollbar h-[85svh] snap-y snap-mandatory overflow-y-auto overscroll-contain rounded-2xl border border-border bg-black">
+          {shorts.map((v) => (
+            <div key={v.src} className="flex h-full snap-start items-center justify-center bg-black">
+              <video
+                src={v.src}
+                poster={v.poster}
+                controls
+                loop
+                playsInline
+                preload="metadata"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="columns-1 gap-4 sm:columns-2 xl:columns-3">
+        {videosAfterShorts.map((v) => (
+          <VideoCard key={v.src} video={v} />
         ))}
       </div>
     </main>
+  );
+}
+
+function VideoCard({ video, zoom }: { video: { src: string; poster: string }; zoom?: boolean }) {
+  return (
+    <div className="mb-4 break-inside-avoid overflow-hidden rounded-lg border border-border bg-card">
+      <video
+        src={video.src}
+        poster={video.poster}
+        controls
+        loop
+        playsInline
+        preload="metadata"
+        className={`block w-full ${zoom ? "scale-110" : ""}`}
+      />
+    </div>
   );
 }
