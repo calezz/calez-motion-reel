@@ -44,10 +44,10 @@ const videos = [
   { src: asset("/motion graphics/motion-gfx1.mp4"), poster: asset("/thumbs/thumb-04.jpg"), duration: "0:40" },
   { src: asset("/3d/3d.mp4"), poster: asset("/thumbs/thumb-01.jpg"), duration: "0:47" },
   { src: asset("/3d/3d1.mp4"), poster: asset("/thumbs/thumb-02.jpg"), duration: "1:15" },
-  { src: asset("/music videos/variant-a-cropped.mp4"), poster: asset("/thumbs/thumb-13.jpg"), duration: "0:12", wide: true },
 ];
 
 const shorts = [
+  { src: asset("/shorts/1.mp4"), poster: asset("/thumbs/thumb-14.jpg"), letterboxed: true },
   { src: asset("/shorts/short.webm"), poster: asset("/thumbs/thumb-11.jpg") },
   { src: asset("/shorts/short1.webm"), poster: asset("/thumbs/thumb-12.jpg") },
 ];
@@ -117,19 +117,14 @@ function VideoTile({
   index,
   zoom,
 }: {
-  video: { src: string; poster: string; duration: string; wide?: boolean };
+  video: { src: string; poster: string; duration: string };
   index: number;
   zoom?: boolean;
 }) {
   const [playing, setPlaying] = useState(false);
-  const mediaRatio = video.wide ? "aspect-video lg:aspect-[21/9]" : "aspect-video";
 
   return (
-    <article
-      className={`group overflow-hidden rounded-xl border border-border bg-card ${
-        video.wide ? "sm:col-span-2 lg:col-span-3" : ""
-      }`}
-    >
+    <article className="group overflow-hidden rounded-xl border border-border bg-card">
       {playing ? (
         <video
           src={video.src}
@@ -138,14 +133,14 @@ function VideoTile({
           autoPlay
           loop
           playsInline
-          className={`w-full bg-black object-cover ${mediaRatio} ${zoom ? "scale-[1.15]" : ""}`}
+          className={`aspect-video w-full bg-black object-cover ${zoom ? "scale-[1.15]" : ""}`}
         />
       ) : (
         <button
           type="button"
           onClick={() => setPlaying(true)}
           aria-label={`Play film ${index}`}
-          className={`relative block w-full overflow-hidden text-left ${mediaRatio}`}
+          className="relative block aspect-video w-full overflow-hidden text-left"
         >
           <img
             src={video.poster}
@@ -173,7 +168,7 @@ function VideoTile({
   );
 }
 
-function ShortTile({ short }: { short: { src: string; poster: string } }) {
+function ShortTile({ short }: { short: { src: string; poster: string; letterboxed?: boolean } }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   const [paused, setPaused] = useState(true);
@@ -192,22 +187,45 @@ function ShortTile({ short }: { short: { src: string; poster: string } }) {
     setMuted(video.muted);
   }
 
+  const video = (
+    <video
+      ref={videoRef}
+      src={short.src}
+      poster={short.poster}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      onClick={togglePlay}
+      onPlay={() => setPaused(false)}
+      onPause={() => setPaused(true)}
+      className={
+        short.letterboxed
+          ? "absolute left-0 top-1/2 w-full -translate-y-1/2 cursor-pointer object-cover"
+          : "h-full w-full cursor-pointer object-cover"
+      }
+      style={short.letterboxed ? { height: "227%" } : undefined}
+    />
+  );
+
   return (
     <div className="relative h-full snap-start overflow-hidden bg-black">
-      <video
-        ref={videoRef}
-        src={short.src}
-        poster={short.poster}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        onClick={togglePlay}
-        onPlay={() => setPaused(false)}
-        onPause={() => setPaused(true)}
-        className="h-full w-full cursor-pointer object-cover"
-      />
+      {short.letterboxed && (
+        <img
+          src={short.poster}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 blur-2xl"
+        />
+      )}
+      {short.letterboxed ? (
+        <div className="absolute inset-x-0 top-1/2 aspect-[720/564] -translate-y-1/2 overflow-hidden">
+          {video}
+        </div>
+      ) : (
+        video
+      )}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/70 to-transparent" />
       {paused && (
         <button
