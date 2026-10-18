@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowDown, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowDown, AtSign, Check, Copy, Play, Volume2, VolumeX } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,9 +49,17 @@ function Index() {
           <a href="#top" className="font-display text-lg font-extrabold">
             calez<span className="text-primary">.</span>
           </a>
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            Available for work
+          <div className="flex items-center gap-5">
+            <a
+              href="#contact"
+              className="hidden text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition hover:text-foreground sm:block"
+            >
+              Contact
+            </a>
+            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              Available for work
+            </div>
           </div>
         </div>
       </header>
@@ -90,7 +98,53 @@ function Index() {
         </div>
         <ShortsFeed shorts={shorts} />
       </section>
+
+      <footer id="contact" className="scroll-mt-20 border-t border-border">
+        <div className="mx-auto flex max-w-[1500px] flex-col gap-6 px-4 py-12 md:flex-row md:items-end md:justify-between md:px-6 md:py-16">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Contact</p>
+            <h2 className="mt-3 font-display text-3xl font-extrabold leading-tight md:text-5xl">
+              Find me on Discord<span className="text-primary">.</span>
+            </h2>
+          </div>
+          <DiscordHandle />
+        </div>
+      </footer>
     </main>
+  );
+}
+
+function DiscordHandle() {
+  const [copied, setCopied] = useState(false);
+
+  async function copyHandle() {
+    try {
+      await navigator.clipboard.writeText("calez");
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={copyHandle}
+      aria-label="Copy Discord handle calez"
+      className="inline-flex items-center gap-3 self-start rounded-full border border-border bg-card py-2.5 pl-2.5 pr-5 text-left transition hover:border-primary/60 active:scale-[0.98] md:self-auto"
+    >
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground">
+        <AtSign className="h-5 w-5" />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Discord</span>
+        <span className="block text-lg font-semibold leading-tight">calez</span>
+      </span>
+      <span className="ml-1 text-muted-foreground">
+        {copied ? <Check className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4" />}
+      </span>
+    </button>
   );
 }
 
