@@ -30,6 +30,7 @@ const clips = [
   { src: asset("/3d/video (9).mp4"), poster: asset("/thumbs/3d-10.jpg") },
   { src: asset("/3d/video (10).mp4"), poster: asset("/thumbs/3d-11.jpg") },
   { src: asset("/3d/video (11).mp4"), poster: asset("/thumbs/3d-12.jpg") },
+  { src: asset("/3d/videodark.mp4"), poster: asset("/thumbs/3d-13.jpg") },
 ];
 
 function ThreeDPage() {
