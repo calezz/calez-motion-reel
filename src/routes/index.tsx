@@ -33,11 +33,6 @@ const videos = [
     duration: "0:10",
     overlay: asset("/pfp.png"),
   },
-  {
-    src: asset("/music videos/6.webm"),
-    poster: asset("/thumbs/thumb-09.jpg"),
-    duration: "1:08",
-  },
 ];
 
 const shorts = [
@@ -98,7 +93,7 @@ function Index() {
       </section>
 
       <section id="work" className="mx-auto max-w-[1500px] px-4 pb-4 md:px-6">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4 lg:[&>article:last-child]:col-start-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
           {videos.map((video, i) => (
             <VideoTile
               key={video.src}
