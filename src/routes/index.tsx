@@ -59,12 +59,6 @@ function Index() {
           </a>
           <div className="flex items-center gap-5">
             <Link
-              to="/3d"
-              className="hidden text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition hover:text-foreground sm:block"
-            >
-              3D
-            </Link>
-            <Link
               to="/thumbnails"
               className="hidden text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition hover:text-foreground sm:block"
             >
