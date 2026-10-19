@@ -19,7 +19,6 @@ export const Route = createFileRoute("/3d")({
 const asset = (path: string) => encodeURI(path);
 
 const clips = [
-  { src: asset("/3d/video.mp4"), poster: asset("/thumbs/3d-01.jpg") },
   { src: asset("/3d/video (1).mp4"), poster: asset("/thumbs/3d-02.jpg") },
   { src: asset("/3d/video (2).mp4"), poster: asset("/thumbs/3d-03.jpg") },
   { src: asset("/3d/video (3).mp4"), poster: asset("/thumbs/3d-04.jpg") },

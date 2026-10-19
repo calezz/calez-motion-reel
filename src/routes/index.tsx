@@ -25,6 +25,7 @@ const videos = [
   { src: asset("/music videos/4.mp4"), poster: asset("/thumbs/thumb-18.jpg"), duration: "0:26" },
   { src: asset("/music videos/5.mp4"), poster: asset("/thumbs/thumb-19.jpg"), duration: "0:18" },
   { src: asset("/music videos/7.mp4"), poster: asset("/thumbs/thumb-21.jpg"), duration: "0:13" },
+  { src: asset("/music videos/8.mp4"), poster: asset("/thumbs/thumb-22.jpg"), duration: "0:10" },
   { src: asset("/motion graphics/0-web.mp4"), poster: asset("/thumbs/thumb-20.jpg"), duration: "1:01" },
   {
     src: asset("/3d/video-pfp.mp4"),
@@ -103,7 +104,7 @@ function Index() {
       </section>
 
       <section id="work" className="mx-auto max-w-[1500px] px-4 pb-4 md:px-6">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4 lg:[&>article:last-child]:col-start-2">
           {videos.map((video, i) => (
             <VideoTile
               key={video.src}
