@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as R3dRouteImport } from './routes/3d'
 import { Route as ThumbnailsRouteImport } from './routes/thumbnails'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const R3dRoute = R3dRouteImport.update({
+  id: '/3d',
+  path: '/3d',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ThumbnailsRoute = ThumbnailsRouteImport.update({
@@ -25,27 +31,31 @@ const ThumbnailsRoute = ThumbnailsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/3d': typeof R3dRoute
   '/thumbnails': typeof ThumbnailsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/3d': typeof R3dRoute
   '/thumbnails': typeof ThumbnailsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/3d': typeof R3dRoute
   '/thumbnails': typeof ThumbnailsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/thumbnails'
+  fullPaths: '/' | '/3d' | '/thumbnails'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/thumbnails'
-  id: '__root__' | '/' | '/thumbnails'
+  to: '/' | '/3d' | '/thumbnails'
+  id: '__root__' | '/' | '/3d' | '/thumbnails'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  R3dRoute: typeof R3dRoute
   ThumbnailsRoute: typeof ThumbnailsRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/3d': {
+      id: '/3d'
+      path: '/3d'
+      fullPath: '/3d'
+      preLoaderRoute: typeof R3dRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/thumbnails': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R3dRoute: R3dRoute,
   ThumbnailsRoute: ThumbnailsRoute,
 }
 export const routeTree = rootRouteImport
